@@ -26,9 +26,87 @@ This simulator focuses on closed-loop controller design. Users can configure a p
 
 ![PID Controller](images/pid.png)
 
-## Overview and Usage
+## Live Demo
 
-To run these simulators locally, simply open the corresponding `index.html` file in a modern web browser. No specialized servers or build tools are required.
+The simulators are published and available online at:
+
+**https://smkalami.github.io/control-system-interactive-simulators/**
+
+## Usage
+
+### Online
+
+Visit the live site linked above to use the simulators directly in your browser. No installation or setup is required.
+
+### Local
+
+To run the simulators locally, clone this repository and open the corresponding `index.html` file in a modern web browser. No specialized servers or build tools are required.
+
+### Embedding in a Website or LMS (e.g., Blackboard)
+
+You can embed any simulator directly into a webpage or Learning Management System using an `<iframe>`. Below are sample embed codes for each simulator.
+
+**Simulator Hub (all simulators):**
+```html
+<iframe
+  src="https://smkalami.github.io/control-system-interactive-simulators/"
+  width="100%"
+  height="700"
+  style="border: none;"
+  allowfullscreen
+  title="Control System Interactive Simulators">
+</iframe>
+```
+
+**First-Order System:**
+```html
+<iframe
+  src="https://smkalami.github.io/control-system-interactive-simulators/linear-system-1st-order/"
+  width="100%"
+  height="700"
+  style="border: none;"
+  allowfullscreen
+  title="First-Order System Simulator">
+</iframe>
+```
+
+**Second-Order System:**
+```html
+<iframe
+  src="https://smkalami.github.io/control-system-interactive-simulators/linear-system-2nd-order/"
+  width="100%"
+  height="700"
+  style="border: none;"
+  allowfullscreen
+  title="Second-Order System Simulator">
+</iframe>
+```
+
+**Pole-Zero Map:**
+```html
+<iframe
+  src="https://smkalami.github.io/control-system-interactive-simulators/pole-zero/"
+  width="100%"
+  height="700"
+  style="border: none;"
+  allowfullscreen
+  title="Pole-Zero Map Simulator">
+</iframe>
+```
+
+**PID Controller:**
+```html
+<iframe
+  src="https://smkalami.github.io/control-system-interactive-simulators/pid/"
+  width="100%"
+  height="700"
+  style="border: none;"
+  allowfullscreen
+  title="PID Controller Simulator">
+</iframe>
+```
+
+Paste the desired snippet into an HTML block or "Embed" widget in your LMS. Adjust the `width` and `height` attributes to fit your page layout.
 
 ## Author
 
