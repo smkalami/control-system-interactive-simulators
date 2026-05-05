@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pole-Zero Map Simulator</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" crossorigin="anonymous" />
+</head>
+<body>
+
+  <header>
+    <a href="../index.html" class="back-link">&#8592; All Simulators</a>
+    <h1>Pole-Zero Map Simulator</h1>
+    <p class="subtitle">Pole and zero locations, \(G(s) = K\dfrac{\prod(s-z_i)}{\prod(s-p_i)}\)</p>
+  </header>
+
+  <main>
+
+    <section class="card controls pz-controls" aria-label="System parameters">
+
+      <div class="control-group select-group">
+        <label for="preset-select">Load Example</label>
+        <select id="preset-select">
+          <option value="custom">Custom system</option>
+          <option value="complex" selected>Complex conjugate poles</option>
+          <option value="stable-real">Stable real poles</option>
+          <option value="near-axis">Pole near imaginary axis</option>
+          <option value="unstable">Unstable pole</option>
+          <option value="cancellation">Pole-zero cancellation example</option>
+          <option value="zero-added">System with zero added</option>
+        </select>
+      </div>
+
+      <div class="control-group select-group">
+        <label for="response-select">Response Type</label>
+        <select id="response-select">
+          <option value="step" selected>Step response</option>
+          <option value="impulse">Impulse response</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label for="k-slider">
+          <span class="param">\(K\)</span>, System Gain
+        </label>
+        <div class="slider-row">
+          <span class="range-label">0.1</span>
+          <input type="range" id="k-slider" min="0.1" max="10" step="0.1" value="1" />
+          <span class="range-label">10</span>
+          <label for="k-number" class="sr-only">System gain number input</label>
+          <input type="number" id="k-number" min="0.1" max="10" step="0.1" value="1" />
+        </div>
+      </div>
+
+      <div class="component-grid">
+
+        <div class="component-block" id="real-pole-a-block">
+          <div class="component-head">
+            <input type="checkbox" id="real-pole-a-enabled" />
+            <label for="real-pole-a-enabled">Real Pole A</label>
+            <span class="component-factor" id="real-pole-a-factor">\((s+1.00)\)</span>
+          </div>
+          <div class="control-group compact-control">
+            <label for="real-pole-a-slider">
+              <span class="param">\(p_a\)</span>, Location
+            </label>
+            <div class="slider-row">
+              <span class="range-label">-5</span>
+              <input type="range" id="real-pole-a-slider" min="-5" max="3" step="0.1" value="-1" />
+              <span class="range-label">3</span>
+              <label for="real-pole-a-number" class="sr-only">Real Pole A location number input</label>
+              <input type="number" id="real-pole-a-number" min="-5" max="3" step="0.1" value="-1" />
+            </div>
+          </div>
+        </div>
+
+        <div class="component-block" id="real-pole-b-block">
+          <div class="component-head">
+            <input type="checkbox" id="real-pole-b-enabled" />
+            <label for="real-pole-b-enabled">Real Pole B</label>
+            <span class="component-factor" id="real-pole-b-factor">\((s+2.00)\)</span>
+          </div>
+          <div class="control-group compact-control">
+            <label for="real-pole-b-slider">
+              <span class="param">\(p_b\)</span>, Location
+            </label>
+            <div class="slider-row">
+              <span class="range-label">-5</span>
+              <input type="range" id="real-pole-b-slider" min="-5" max="3" step="0.1" value="-2" />
+              <span class="range-label">3</span>
+              <label for="real-pole-b-number" class="sr-only">Real Pole B location number input</label>
+              <input type="number" id="real-pole-b-number" min="-5" max="3" step="0.1" value="-2" />
+            </div>
+          </div>
+        </div>
+
+        <div class="component-block" id="complex-pair-block">
+          <div class="component-head">
+            <input type="checkbox" id="complex-pair-enabled" checked />
+            <label for="complex-pair-enabled">Complex Pole Pair</label>
+            <span class="component-factor" id="complex-pair-factor">\(s^2+2.00s+5.00\)</span>
+          </div>
+          <div class="control-group compact-control">
+            <label for="complex-real-slider">
+              <span class="param">\(\sigma\)</span>, Real Part
+            </label>
+            <div class="slider-row">
+              <span class="range-label">-4</span>
+              <input type="range" id="complex-real-slider" min="-4" max="2" step="0.1" value="-1" />
+              <span class="range-label">2</span>
+              <label for="complex-real-number" class="sr-only">Complex pole real part number input</label>
+              <input type="number" id="complex-real-number" min="-4" max="2" step="0.1" value="-1" />
+            </div>
+          </div>
+          <div class="control-group compact-control">
+            <label for="complex-imag-slider">
+              <span class="param">\(\omega\)</span>, Imaginary Part
+              <span class="unit">(rad/s)</span>
+            </label>
+            <div class="slider-row">
+              <span class="range-label">0.1</span>
+              <input type="range" id="complex-imag-slider" min="0.1" max="5" step="0.1" value="2" />
+              <span class="range-label">5</span>
+              <label for="complex-imag-number" class="sr-only">Complex pole imaginary part number input</label>
+              <input type="number" id="complex-imag-number" min="0.1" max="5" step="0.1" value="2" />
+            </div>
+          </div>
+        </div>
+
+        <div class="component-block" id="real-zero-a-block">
+          <div class="component-head">
+            <input type="checkbox" id="real-zero-a-enabled" />
+            <label for="real-zero-a-enabled">Real Zero A</label>
+            <span class="component-factor" id="real-zero-a-factor">\((s+0.50)\)</span>
+          </div>
+          <div class="control-group compact-control">
+            <label for="real-zero-a-slider">
+              <span class="param">\(z_a\)</span>, Location
+            </label>
+            <div class="slider-row">
+              <span class="range-label">-5</span>
+              <input type="range" id="real-zero-a-slider" min="-5" max="3" step="0.1" value="-0.5" />
+              <span class="range-label">3</span>
+              <label for="real-zero-a-number" class="sr-only">Real Zero A location number input</label>
+              <input type="number" id="real-zero-a-number" min="-5" max="3" step="0.1" value="-0.5" />
+            </div>
+          </div>
+        </div>
+
+        <div class="component-block" id="real-zero-b-block">
+          <div class="component-head">
+            <input type="checkbox" id="real-zero-b-enabled" />
+            <label for="real-zero-b-enabled">Real Zero B</label>
+            <span class="component-factor" id="real-zero-b-factor">\((s+3.00)\)</span>
+          </div>
+          <div class="control-group compact-control">
+            <label for="real-zero-b-slider">
+              <span class="param">\(z_b\)</span>, Location
+            </label>
+            <div class="slider-row">
+              <span class="range-label">-5</span>
+              <input type="range" id="real-zero-b-slider" min="-5" max="3" step="0.1" value="-3" />
+              <span class="range-label">3</span>
+              <label for="real-zero-b-number" class="sr-only">Real Zero B location number input</label>
+              <input type="number" id="real-zero-b-number" min="-5" max="3" step="0.1" value="-3" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="badge-row">
+        <span id="system-type" class="badge badge-oscillatory">Stable oscillatory response</span>
+      </div>
+
+    </section>
+
+    <section class="pz-chart-grid" aria-label="Pole-zero map and response plots">
+      <div class="card chart-section">
+        <h2>Pole-Zero Map</h2>
+        <div class="chart-wrap split-chart-wrap">
+          <canvas id="map-chart"></canvas>
+        </div>
+      </div>
+      <div class="card chart-section">
+        <h2>Time Response</h2>
+        <div class="chart-wrap split-chart-wrap">
+          <canvas id="response-chart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Transfer function and interpretation">
+      <h2>Transfer Function</h2>
+      <div class="formula-block">
+        <div class="formula-item" id="tf-display">\[\displaystyle G(s) = \frac{1.00}{s^2+2.00s+5.00}\]</div>
+      </div>
+      <p class="explanation" id="config-explanation"></p>
+    </section>
+
+    <section class="card" aria-label="Pole-zero characteristics">
+      <h2>Stability and Interpretation</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Characteristic</th>
+              <th>Formula</th>
+              <th>Value</th>
+              <th>Annotation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Enabled poles</td>
+              <td class="formula">\(n_p\)</td>
+              <td class="value" id="char-poles">N/A</td>
+              <td><span class="swatch pole"></span> cross markers</td>
+            </tr>
+            <tr>
+              <td>Enabled zeros</td>
+              <td class="formula">\(n_z\)</td>
+              <td class="value" id="char-zeros">N/A</td>
+              <td><span class="swatch zero"></span> circle markers</td>
+            </tr>
+            <tr>
+              <td>Transfer function order</td>
+              <td class="formula">\(\deg D(s)\)</td>
+              <td class="value" id="char-order">N/A</td>
+              <td><span class="swatch slope"></span> denominator order</td>
+            </tr>
+            <tr>
+              <td>Dominant pole real part</td>
+              <td class="formula">\(\max \operatorname{Re}(p_i)\)</td>
+              <td class="value" id="char-dominant-real">N/A</td>
+              <td><span class="swatch ts"></span> violet vertical line</td>
+            </tr>
+            <tr>
+              <td>Stability status</td>
+              <td class="formula">\(\operatorname{Re}(p_i) &lt; 0\)</td>
+              <td class="value" id="char-stability">N/A</td>
+              <td><span class="swatch stable"></span> left-half plane is stable</td>
+            </tr>
+            <tr>
+              <td>Oscillation tendency</td>
+              <td class="formula">\(\operatorname{Im}(p_i) \ne 0\)</td>
+              <td class="value" id="char-oscillation">N/A</td>
+              <td><span class="swatch peak"></span> complex poles oscillate</td>
+            </tr>
+            <tr>
+              <td>Expected speed</td>
+              <td class="formula">\(-1/\operatorname{Re}(p_d)\)</td>
+              <td class="value" id="char-speed">N/A</td>
+              <td><span class="swatch tau"></span> dominant decay rate</td>
+            </tr>
+            <tr>
+              <td>Zero effect</td>
+              <td class="formula">\(s-z_i\)</td>
+              <td class="value" id="char-zero-effect">N/A</td>
+              <td><span class="swatch zero"></span> zeros shape response</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="author-footer">
+      <span>Mostapha Kalami Heris</span>
+      &nbsp;&mdash;&nbsp;
+      <a href="https://github.com/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        github.com/smkalami
+      </a>
+      <a href="https://linkedin.com/in/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+        linkedin.com/in/smkalami
+      </a>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="app.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script>
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$',  right: '$$',  display: true  },
+        { left: '\\[', right: '\\]', display: true  },
+        { left: '\\(', right: '\\)', display: false },
+      ],
+      throwOnError: false,
+    });
+  </script>
+
+</body>
+</html>

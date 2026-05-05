@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2nd-Order Linear System — Step Response</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <!-- KaTeX — math rendering -->
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" crossorigin="anonymous" />
+</head>
+<body>
+
+  <header>
+    <a href="../index.html" class="back-link">&#8592; All Simulators</a>
+    <h1>2nd-Order Linear System</h1>
+    <p class="subtitle">Step Response Simulator &ensp;&mdash;&ensp;
+      \(\displaystyle G(s) = \frac{K\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}\)
+    </p>
+  </header>
+
+  <main>
+
+    <!-- ── Controls ───────────────────────────────────────────────────── -->
+    <section class="card controls" aria-label="System parameters">
+
+      <div class="control-group">
+        <label for="k-slider">
+          <span class="param">\(K\)</span> &mdash; Steady-State Gain
+        </label>
+        <div class="slider-row">
+          <span class="range-label">0.1</span>
+          <input type="range"  id="k-slider"    min="0.1" max="5"  step="0.1"  value="1"   />
+          <span class="range-label">5</span>
+          <input type="number" id="k-number"    min="0.1" max="5"  step="0.1"  value="1"   />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="wn-slider">
+          <span class="param">\(\omega_n\)</span> &mdash; Natural Frequency
+          <span class="unit">(rad/s)</span>
+        </label>
+        <div class="slider-row">
+          <span class="range-label">0.1</span>
+          <input type="range"  id="wn-slider"   min="0.1" max="10" step="0.1"  value="2"   />
+          <span class="range-label">10</span>
+          <input type="number" id="wn-number"   min="0.1" max="10" step="0.1"  value="2"   />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="zeta-slider">
+          <span class="param">\(\zeta\)</span> &mdash; Damping Ratio
+        </label>
+        <div class="slider-row">
+          <span class="range-label">0</span>
+          <input type="range"  id="zeta-slider" min="0"   max="2"  step="0.01" value="0.3" />
+          <span class="range-label">2</span>
+          <input type="number" id="zeta-number" min="0"   max="2"  step="0.01" value="0.3" />
+        </div>
+      </div>
+
+      <!-- System-type badge -->
+      <div class="badge-row">
+        <span id="system-type" class="badge badge-under">Underdamped  (&zeta; &lt; 1)</span>
+      </div>
+
+    </section>
+
+    <!-- ── Chart ──────────────────────────────────────────────────────── -->
+    <section class="card chart-section" aria-label="Step response plot">
+      <div class="chart-wrap">
+        <canvas id="chart"></canvas>
+      </div>
+    </section>
+
+    <!-- ── Characteristics ────────────────────────────────────────────── -->
+    <section class="card" aria-label="Step response characteristics">
+      <h2>Step Response Characteristics</h2>
+
+      <!-- Key formulas (KaTeX display math) -->
+      <div class="formula-block">
+        <div class="formula-item">
+          \[\displaystyle G(s) = \frac{K\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}\]
+        </div>
+        <div class="formula-item">
+          \[\displaystyle y(t) = K\!\left[1 - e^{-\zeta\omega_n t}\!\left(\cos\omega_d t
+            + \frac{\zeta}{\sqrt{1-\zeta^2}}\sin\omega_d t\right)\right]\]
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Characteristic</th>
+              <th>Formula</th>
+              <th>Value</th>
+              <th>Annotation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Steady-state gain</td>
+              <td class="formula">\(y(\infty) = K\)</td>
+              <td class="value" id="char-ss">&mdash;</td>
+              <td><span class="swatch ss"></span> red dashed</td>
+            </tr>
+            <tr>
+              <td>Damped natural freq.</td>
+              <td class="formula">\(\omega_d = \omega_n\sqrt{1-\zeta^2}\)</td>
+              <td class="value" id="char-wd">&mdash;</td>
+              <td><span class="note">underdamped only</span></td>
+            </tr>
+            <tr>
+              <td>% Peak overshoot</td>
+              <td class="formula">\(M_p = e^{-\pi\zeta/\sqrt{1-\zeta^2}}\)</td>
+              <td class="value" id="char-Mp">&mdash;</td>
+              <td><span class="swatch peak"></span> cyan marker</td>
+            </tr>
+            <tr>
+              <td>Time to peak</td>
+              <td class="formula">\(t_p = \pi / \omega_d\)</td>
+              <td class="value" id="char-tp">&mdash;</td>
+              <td><span class="swatch peak"></span> cyan dashed</td>
+            </tr>
+            <tr>
+              <td>Rise time (10%&rarr;90%)</td>
+              <td class="formula">numerical</td>
+              <td class="value" id="char-tr">&mdash;</td>
+              <td><span class="swatch tr"></span> amber region</td>
+            </tr>
+            <tr>
+              <td>Settling time (2%)</td>
+              <td class="formula">\(t_s \approx 4/(\zeta\omega_n)\)</td>
+              <td class="value" id="char-ts">&mdash;</td>
+              <td><span class="swatch ts"></span> violet dashed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Author ──────────────────────────────────────────────────────────────── -->
+    <div class="author-footer">
+      <span>Mostapha Kalami Heris</span>
+      &nbsp;&mdash;&nbsp;
+      <a href="https://github.com/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        github.com/smkalami
+      </a>
+      <a href="https://linkedin.com/in/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+        linkedin.com/in/smkalami
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Chart.js v4 + annotation plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="app.js"></script>
+
+  <!-- KaTeX — render all \(...\) and \[...\] -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script>
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$',  right: '$$',  display: true  },
+        { left: '\\[', right: '\\]', display: true  },
+        { left: '\\(', right: '\\)', display: false },
+      ],
+      throwOnError: false,
+    });
+  </script>
+
+</body>
+</html>

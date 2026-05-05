@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PID Controller Simulator</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <!-- KaTeX — math rendering -->
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" crossorigin="anonymous" />
+</head>
+<body>
+
+  <header>
+    <a href="../index.html" class="back-link">&#8592; Control Systems</a>
+    <h1>PID Controller Simulator</h1>
+    <p class="subtitle">\(C(s) = K_p + \dfrac{K_i}{s} + K_d s\)</p>
+  </header>
+
+  <main>
+
+    <!-- ── Controls ───────────────────────────────────────────────────── -->
+    <section class="card" aria-label="Controller parameters and simulation controls">
+
+      <div class="panel">
+
+        <!-- Reference Input -->
+        <div class="group">
+          <div class="group-title">Reference Input</div>
+
+          <label>Type:
+            <select id="refType">
+              <option value="constant">Constant</option>
+              <option value="sine">Sine Wave</option>
+              <option value="square">Square Wave</option>
+              <option value="triangle">Triangle Wave</option>
+            </select>
+          </label>
+
+          <!-- Constant -->
+          <div class="ref-params" id="pConstant">
+            <label>Value (r):
+              <input type="range" id="refConst" min="0" max="100" step="0.5" value="50" />
+              <span id="refConstVal" class="val">50.0</span>
+            </label>
+          </div>
+
+          <!-- Sine wave -->
+          <div class="ref-params" id="pSine" style="display:none">
+            <label>Offset:
+              <input type="range" id="sineOffset" min="0" max="100" step="0.5" value="50" />
+              <span id="sineOffsetVal" class="val">50.0</span>
+            </label>
+            <label>Amplitude:
+              <input type="range" id="sineAmp" min="0" max="50" step="0.5" value="25" />
+              <span id="sineAmpVal" class="val">25.0</span>
+            </label>
+            <label>Frequency (Hz):
+              <input type="range" id="sineFreq" min="0.01" max="1" step="0.01" value="0.1" />
+              <span id="sineFreqVal" class="val">0.10</span>
+            </label>
+          </div>
+
+          <!-- Square wave -->
+          <div class="ref-params" id="pSquare" style="display:none">
+            <label>Low:
+              <input type="range" id="sqLow" min="0" max="100" step="0.5" value="20" />
+              <span id="sqLowVal" class="val">20.0</span>
+            </label>
+            <label>High:
+              <input type="range" id="sqHigh" min="0" max="100" step="0.5" value="80" />
+              <span id="sqHighVal" class="val">80.0</span>
+            </label>
+            <label>Period (s):
+              <input type="range" id="sqPeriod" min="2" max="60" step="1" value="10" />
+              <span id="sqPeriodVal" class="val">10 s</span>
+            </label>
+            <label>Duty Cycle (%):
+              <input type="range" id="sqDuty" min="1" max="99" step="1" value="50" />
+              <span id="sqDutyVal" class="val">50 %</span>
+            </label>
+          </div>
+
+          <!-- Triangle wave -->
+          <div class="ref-params" id="pTriangle" style="display:none">
+            <label>Low:
+              <input type="range" id="triLow" min="0" max="100" step="0.5" value="20" />
+              <span id="triLowVal" class="val">20.0</span>
+            </label>
+            <label>High:
+              <input type="range" id="triHigh" min="0" max="100" step="0.5" value="80" />
+              <span id="triHighVal" class="val">80.0</span>
+            </label>
+            <label>Period (s):
+              <input type="range" id="triPeriod" min="2" max="60" step="1" value="10" />
+              <span id="triPeriodVal" class="val">10 s</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="panel-col">
+
+        <!-- Controller Parameters -->
+        <div class="group">
+          <div class="group-title">Controller Parameters</div>
+          <label>
+            <input type="checkbox" id="pEn" checked />
+            <span class="param-name">K<sub>p</sub></span>:
+            <input type="range" id="pGain" min="0" max="10" step="0.01" value="1" />
+            <span id="pVal" class="val">1.00</span>
+          </label>
+          <label>
+            <input type="checkbox" id="iEn" />
+            <span class="param-name">K<sub>i</sub></span>:
+            <input type="range" id="iGain" min="0" max="2" step="0.01" value="0.1" />
+            <span id="iVal" class="val">0.10</span>
+          </label>
+          <label>
+            <input type="checkbox" id="dEn" />
+            <span class="param-name">K<sub>d</sub></span>:
+            <input type="range" id="dGain" min="0" max="2" step="0.01" value="0.05" />
+            <span id="dVal" class="val">0.05</span>
+          </label>
+          <label>
+            <input type="checkbox" id="dFiltEn" />
+            Filter &tau;:
+            <input type="range" id="dFiltTau" min="0.01" max="2" step="0.01" value="0.5" />
+            <span id="dFiltTauVal" class="val">0.50 s</span>
+          </label>
+        </div>
+
+        </div><!-- /.panel-col -->
+
+      </div><!-- /.panel -->
+
+      <div class="btn-row">
+        <button id="pauseBtn">Start</button>
+        <button id="resetBtn">Reset</button>
+        <button id="fitBtn" class="secondary">Fit Vertical</button>
+        <label class="tw-control">
+          <span class="tw-label">Time Window:</span>
+          <input type="range" id="timeWin" min="10" max="120" step="5" value="45" />
+          <span id="twVal" class="val">45 s</span>
+        </label>
+        <button id="fsBtn" class="icon-btn" title="Enter fullscreen">&#x26F6;</button>
+      </div>
+
+    </section>
+
+    <!-- ── Plot ───────────────────────────────────────────────────────── -->
+    <section class="card chart-section" aria-label="Simulation plot">
+      <canvas id="plot" width="920" height="520"></canvas>
+    </section>
+
+    <!-- ── Author ─────────────────────────────────────────────────────── -->
+    <div class="author-footer">
+      <span>Mostapha Kalami Heris</span>
+      &nbsp;&mdash;&nbsp;
+      <a href="https://github.com/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        github.com/smkalami
+      </a>
+      <a href="https://linkedin.com/in/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+        linkedin.com/in/smkalami
+      </a>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+
+  <!-- KaTeX — render all \(...\) and \[...\] in the document -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script>
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$',  right: '$$',  display: true  },
+        { left: '\\[', right: '\\]', display: true  },
+        { left: '\\(', right: '\\)', display: false },
+      ],
+      throwOnError: false,
+    });
+  </script>
+
+</body>
+</html>

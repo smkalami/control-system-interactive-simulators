@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Control Systems — Interactive Simulators</title>
+  <link rel="stylesheet" href="styles.css" />
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" crossorigin="anonymous" />
+</head>
+<body class="home">
+
+  <header>
+    <h1>Control Systems</h1>
+    <p class="subtitle">Interactive Simulators</p>
+  </header>
+
+  <main>
+    <div class="sim-grid">
+
+      <!-- ── First-Order Step Response ─────────────────────────────────── -->
+      <a class="sim-card" href="linear-system-1st-order/index.html">
+        <div class="sim-badge">Step Response</div>
+        <h2>First-Order System</h2>
+        <div class="sim-tf">
+          \(\displaystyle G(s) = \frac{K}{\tau s + 1}\)
+        </div>
+        <ul class="sim-params">
+          <li>\(K\) — steady-state gain</li>
+          <li>\(\tau\) — time constant</li>
+          <li>Time constant and settling time annotated</li>
+        </ul>
+        <span class="sim-launch">Launch Simulator &#8594;</span>
+      </a>
+
+      <!-- ── Second-Order Step Response ────────────────────────────────── -->
+      <a class="sim-card" href="linear-system-2nd-order/index.html">
+        <div class="sim-badge">Step Response</div>
+        <h2>Second-Order System</h2>
+        <div class="sim-tf">
+          \(\displaystyle G(s) = \frac{K\omega_n^2}{s^2 + 2\zeta\omega_n s + \omega_n^2}\)
+        </div>
+        <ul class="sim-params">
+          <li>\(\omega_n\) — natural frequency, \(\zeta\) — damping ratio</li>
+          <li>Underdamped, critically damped, overdamped regimes</li>
+          <li>Rise time, peak time, overshoot, and settling time annotated</li>
+        </ul>
+        <span class="sim-launch">Launch Simulator &#8594;</span>
+      </a>
+
+      <!-- ── Pole-Zero Map ─────────────────────────────────────────────── -->
+      <a class="sim-card" href="pole-zero/index.html">
+        <div class="sim-badge">Pole-Zero Map</div>
+        <h2>Pole-Zero Map Simulator</h2>
+        <div class="sim-tf">
+          \(\displaystyle G(s) = K\frac{\prod(s-z_i)}{\prod(s-p_i)}\)
+        </div>
+        <ul class="sim-params">
+          <li>\(K\) gain, pole pair location, and optional zero</li>
+          <li>Stable, oscillatory, slow, and unstable configurations</li>
+          <li>s-plane map linked to step and impulse responses</li>
+        </ul>
+        <span class="sim-launch">Launch Simulator &#8594;</span>
+      </a>
+      
+      <!-- ── PID Controller ─────────────────────────────────────────────── -->
+      <a class="sim-card" href="pid/index.html">
+        <div class="sim-badge">Controller Design</div>
+        <h2>PID Controller</h2>
+        <div class="sim-tf">
+          \(\displaystyle C(s) = K_p + \frac{K_i}{s} + K_d s\)
+        </div>
+        <ul class="sim-params">
+          <li>\(K_p\), \(K_i\), \(K_d\) — proportional, integral, derivative gains</li>
+          <li>Configurable plant and reference signal</li>
+          <li>Real-time animated closed-loop response</li>
+        </ul>
+        <span class="sim-launch">Launch Simulator &#8594;</span>
+      </a>
+
+    </div>
+
+    <!-- ── Author ──────────────────────────────────────────────────────────────── -->
+    <div class="author-footer">
+      <span>Mostapha Kalami Heris</span>
+      &nbsp;&mdash;&nbsp;
+      <a href="https://github.com/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        github.com/smkalami
+      </a>
+      <a href="https://linkedin.com/in/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+        linkedin.com/in/smkalami
+      </a>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script>
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '\\[', right: '\\]', display: true  },
+        { left: '\\(', right: '\\)', display: false },
+      ],
+      throwOnError: false,
+    });
+  </script>
+
+</body>
+</html>

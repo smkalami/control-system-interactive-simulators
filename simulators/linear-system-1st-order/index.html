@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1st-Order Linear System — Step Response</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <!-- KaTeX — math rendering -->
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" crossorigin="anonymous" />
+</head>
+<body>
+
+  <header>
+    <a href="../index.html" class="back-link">&#8592; All Simulators</a>
+    <h1>1st-Order Linear System</h1>
+    <p class="subtitle">Step Response Simulator &ensp;&mdash;&ensp; \(G(s) = \dfrac{K}{\tau s + 1}\)</p>
+  </header>
+
+  <main>
+
+    <!-- ── Controls ───────────────────────────────────────────────────── -->
+    <section class="card controls" aria-label="System parameters">
+
+      <div class="control-group">
+        <label for="tau-slider">
+          <span class="param">&tau;</span> &mdash; Time Constant
+          <span class="unit">(seconds)</span>
+        </label>
+        <div class="slider-row">
+          <span class="range-label">0.1</span>
+          <input type="range"  id="tau-slider" min="0.1" max="5" step="0.1" value="1" />
+          <span class="range-label">5</span>
+          <input type="number" id="tau-number" min="0.1" max="5" step="0.1" value="1" />
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label for="k-slider">
+          <span class="param">K</span> &mdash; Steady-State Gain
+        </label>
+        <div class="slider-row">
+          <span class="range-label">0</span>
+          <input type="range"  id="k-slider" min="0" max="2" step="0.1" value="1" />
+          <span class="range-label">2</span>
+          <input type="number" id="k-number" min="0" max="2" step="0.1" value="1" />
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── Chart ──────────────────────────────────────────────────────── -->
+    <section class="card chart-section" aria-label="Step response plot">
+      <div class="chart-wrap">
+        <canvas id="chart"></canvas>
+      </div>
+    </section>
+
+    <!-- ── Characteristics table ──────────────────────────────────────── -->
+    <section class="card" aria-label="Step response characteristics">
+      <h2>Step Response Characteristics</h2>
+      <div class="formula-block">
+        <div class="formula-item">\[\displaystyle G(s) = \frac{K}{\tau s + 1}\]</div>
+        <div class="formula-item">\[\displaystyle y(t) = K\!\left(1 - e^{-t/\tau}\right)\]</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Characteristic</th>
+              <th>Formula</th>
+              <th>Value</th>
+              <th>Annotation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Steady-state gain</td>
+              <td class="formula">\(y(\infty) = K\)</td>
+              <td class="value" id="char-ss">&mdash;</td>
+              <td><span class="swatch ss"></span> red dashed</td>
+            </tr>
+            <tr>
+              <td>Time constant &tau;</td>
+              <td class="formula">\(y(\tau) = K(1 - e^{-1}) \approx 0.632\,K\)</td>
+              <td class="value" id="char-ytau">&mdash;</td>
+              <td><span class="swatch tau"></span> green marker</td>
+            </tr>
+            <tr>
+              <td>Rise time (10%&rarr;90%)</td>
+              <td class="formula">\(t_r = \tau\ln 9 \approx 2.197\,\tau\)</td>
+              <td class="value" id="char-tr">&mdash;</td>
+              <td><span class="swatch tr"></span> orange region</td>
+            </tr>
+            <tr>
+              <td>Settling time (2%)</td>
+              <td class="formula">\(t_s \approx 4\tau\)</td>
+              <td class="value" id="char-ts">&mdash;</td>
+              <td><span class="swatch ts"></span> purple dashed</td>
+            </tr>
+            <tr>
+              <td>Initial slope</td>
+              <td class="formula">\(\left.\dfrac{dy}{dt}\right|_{t=0} = \dfrac{K}{\tau}\)</td>
+              <td class="value" id="char-slope">&mdash;</td>
+              <td><span class="swatch slope"></span> gray tangent</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Author ──────────────────────────────────────────────────────────────── -->
+    <div class="author-footer">
+      <span>Mostapha Kalami Heris</span>
+      &nbsp;&mdash;&nbsp;
+      <a href="https://github.com/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-github" aria-hidden="true"></i>
+        github.com/smkalami
+      </a>
+      <a href="https://linkedin.com/in/smkalami" target="_blank" rel="noopener noreferrer">
+        <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+        linkedin.com/in/smkalami
+      </a>
+    </div>
+
+  </main>
+
+  <!-- Chart.js v4 + annotation plugin (auto-registers via UMD) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3/dist/chartjs-plugin-annotation.min.js"></script>
+  <script src="app.js"></script>
+
+  <!-- KaTeX — render all \(...\) and \[...\] in the document -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+  <script>
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$',  right: '$$',  display: true  },
+        { left: '\\[', right: '\\]', display: true  },
+        { left: '\\(', right: '\\)', display: false },
+      ],
+      throwOnError: false,
+    });
+  </script>
+
+</body>
+</html>
