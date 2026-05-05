@@ -14,6 +14,7 @@
   <header>
     <h1>Control Systems</h1>
     <p class="subtitle">Interactive Simulators</p>
+    <button id="fsBtn" class="icon-btn" title="Enter fullscreen">&#x26F6; Full Screen</button>
   </header>
 
   <main>
@@ -107,6 +108,25 @@
       ],
       throwOnError: false,
     });
+  </script>
+
+  <script>
+    (function () {
+      const fsBtn = document.getElementById('fsBtn');
+      function updateFsBtn() {
+        const inFs      = !!document.fullscreenElement;
+        fsBtn.innerHTML = inFs ? '&#x2715; Exit Full Screen' : '&#x26F6; Full Screen';
+        fsBtn.title     = inFs ? 'Exit fullscreen' : 'Enter fullscreen';
+      }
+      fsBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      });
+      document.addEventListener('fullscreenchange', updateFsBtn);
+    })();
   </script>
 
 </body>

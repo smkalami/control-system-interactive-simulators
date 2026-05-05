@@ -37,6 +37,7 @@ header {
   color: var(--header-text);
   padding: 1.1rem 2rem;
   user-select: none;
+  position: relative;
 }
 
 header h1 {
@@ -54,6 +55,26 @@ header h1 {
 .home header h1 {
   font-size: 1.75rem;
   letter-spacing: -0.02em;
+}
+
+header #fsBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: transparent;
+  color: #94a3b8;
+  border: 1.5px solid #475569;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  line-height: 1;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+header #fsBtn:hover {
+  color: #f1f5f9;
+  border-color: #94a3b8;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* ─── Subtitle ───────────────────────────────────────────────────────────── */
@@ -575,11 +596,10 @@ td.value {
   top: 2px;
 }
 
-/* ─── Fullscreen (PID) ───────────────────────────────────────────────────── */
-:fullscreen main,
-:-webkit-full-screen main {
-  max-width: 100%;
-  padding: 1rem 1.25rem 1.5rem;
+/* ─── Fullscreen ─────────────────────────────────────────────────────────── */
+:fullscreen body,
+:-webkit-full-screen body {
+  overflow-y: auto;
 }
 
 /* ─── Responsive ─────────────────────────────────────────────────────────── */

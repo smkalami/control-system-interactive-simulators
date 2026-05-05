@@ -420,3 +420,20 @@ window.addEventListener('DOMContentLoaded', () => {
   syncInputs('wn-slider',   'wn-number',   val => { wn   = val; updateChart(); });
   syncInputs('zeta-slider', 'zeta-number', val => { zeta = val; updateChart(); });
 });
+
+// ── Fullscreen ─────────────────────────────────────────────────────────────────
+const fsBtn = document.getElementById('fsBtn');
+
+function updateFsBtn() {
+  const inFs      = !!document.fullscreenElement;
+  fsBtn.innerHTML = inFs ? '&#x2715; Exit Full Screen' : '&#x26F6; Full Screen';
+  fsBtn.title     = inFs ? 'Exit fullscreen' : 'Enter fullscreen';
+}
+fsBtn.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+});
+document.addEventListener('fullscreenchange', updateFsBtn);

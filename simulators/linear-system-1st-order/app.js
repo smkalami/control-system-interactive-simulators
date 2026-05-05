@@ -340,3 +340,20 @@ window.addEventListener('DOMContentLoaded', () => {
   syncInputs('tau-slider', 'tau-number', val => { tau = val; updateChart(); });
   syncInputs('k-slider',   'k-number',   val => { K   = val; updateChart(); });
 });
+
+// ── Fullscreen ─────────────────────────────────────────────────────────────────
+const fsBtn = document.getElementById('fsBtn');
+
+function updateFsBtn() {
+  const inFs      = !!document.fullscreenElement;
+  fsBtn.innerHTML = inFs ? '&#x2715; Exit Full Screen' : '&#x26F6; Full Screen';
+  fsBtn.title     = inFs ? 'Exit fullscreen' : 'Enter fullscreen';
+}
+fsBtn.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+});
+document.addEventListener('fullscreenchange', updateFsBtn);

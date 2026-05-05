@@ -359,7 +359,7 @@ dFiltEnCk.addEventListener('change', () => updateFilterRow());
 // ── Fullscreen ─────────────────────────────────────────────────────────────────
 function updateFsBtn() {
   const inFs      = !!document.fullscreenElement;
-  fsBtn.innerHTML = inFs ? '&#x2715;' : '&#x26F6;';
+  fsBtn.innerHTML = inFs ? '&#x2715; Exit Full Screen' : '&#x26F6; Full Screen';
   fsBtn.title     = inFs ? 'Exit fullscreen' : 'Enter fullscreen';
 }
 fsBtn.addEventListener('click', () => {

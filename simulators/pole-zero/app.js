@@ -861,3 +861,20 @@ window.addEventListener('DOMContentLoaded', () => {
   syncInputs('real-zero-a-slider', 'real-zero-a-number', val => { state.realZeroA.value = val; markCustomPreset(); updateChart(); });
   syncInputs('real-zero-b-slider', 'real-zero-b-number', val => { state.realZeroB.value = val; markCustomPreset(); updateChart(); });
 });
+
+// ── Fullscreen ─────────────────────────────────────────────────────────────────
+const fsBtn = document.getElementById('fsBtn');
+
+function updateFsBtn() {
+  const inFs      = !!document.fullscreenElement;
+  fsBtn.innerHTML = inFs ? '&#x2715; Exit Full Screen' : '&#x26F6; Full Screen';
+  fsBtn.title     = inFs ? 'Exit fullscreen' : 'Enter fullscreen';
+}
+fsBtn.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+});
+document.addEventListener('fullscreenchange', updateFsBtn);
